@@ -10,7 +10,6 @@ CREATE TABLE Usuario (
     Nombre VARCHAR(50) NOT NULL,
     Correo VARCHAR(50) UNIQUE NOT NULL,
     Contrasena VARCHAR(20) NOT NULL,
-    Telefono VARCHAR(20),
     Rol ENUM('Visitante', 'Registrado', 'Empleado', 'Administrador') NOT NULL
 );
 
@@ -147,3 +146,6 @@ CREATE TABLE Compra (
     MetodoPago ENUM('Efectivo','Tarjeta','Transferencia','MercadoPago') NOT NULL,
     FOREIGN KEY (IdCarrito) REFERENCES Carrito(IdCarrito)
 );
+
+
+
