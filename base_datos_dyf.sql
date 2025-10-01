@@ -1,151 +1,161 @@
--- Creación de la base de datos
+-- Active: 1759343905202@@127.0.0.1@3306
+DROP DATABASE IF EXISTS LigaParanaBasquet;
 CREATE DATABASE LigaParanaBasquet;
 USE LigaParanaBasquet;
+
 
 -- ======================
 -- TABLA: Usuario
 -- ======================
 CREATE TABLE Usuario (
-    IdUsuario INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre VARCHAR(50) NOT NULL,
-    Correo VARCHAR(50) UNIQUE NOT NULL,
-    Contrasena VARCHAR(20) NOT NULL,
-    Rol ENUM('Visitante', 'Registrado', 'Empleado', 'Administrador') NOT NULL
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    correo VARCHAR(50) UNIQUE NOT NULL,
+    contrasena VARCHAR(60) NOT NULL,
+    rol ENUM('Visitante', 'Registrado', 'Empleado', 'Administrador') NOT NULL
 );
+
 
 -- ======================
 -- TABLA: Liga
 -- ======================
 CREATE TABLE Liga (
-    IdLiga INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre VARCHAR(100) NOT NULL,
-    FechaInicio DATE,
-    FechaFin DATE,
-    Anio YEAR NOT NULL
+    id_liga INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    fecha_inicio DATE,
+    fecha_fin DATE,
+    anio YEAR NOT NULL
 );
+
 
 -- ======================
 -- TABLA: Equipo
 -- ======================
 CREATE TABLE Equipo (
-    IdEquipo INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre VARCHAR(100) NOT NULL,
-    Ciudad VARCHAR(50),
-    Direccion VARCHAR(50),
-    Logo VARCHAR(255),
-    Descripcion VARCHAR(255),
-    IdLiga INT NOT NULL,
-    FOREIGN KEY (IdLiga) REFERENCES Liga(IdLiga)
+    id_equipo INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    ciudad VARCHAR(50),
+    direccion VARCHAR(50),
+    logo VARCHAR(255),
+    descripcion VARCHAR(255),
+    id_liga INT NOT NULL,
+    FOREIGN KEY (id_liga) REFERENCES Liga(id_liga)
 );
+
 
 -- ======================
 -- TABLA: Jornada
 -- ======================
 CREATE TABLE Jornada (
-    IdJornada INT AUTO_INCREMENT PRIMARY KEY,
-    Numero INT NOT NULL,
-    FechaInicio DATE,
-    FechaFin DATE,
-    IdLiga INT NOT NULL,
-    FOREIGN KEY (IdLiga) REFERENCES Liga(IdLiga)
+    id_jornada INT AUTO_INCREMENT PRIMARY KEY,
+    numero INT NOT NULL,
+    fecha_inicio DATE,
+    fecha_fin DATE,
+    id_liga INT NOT NULL,
+    FOREIGN KEY (id_liga) REFERENCES Liga(id_liga) ON DELETE CASCADE
 );
+
 
 -- ======================
 -- TABLA: Partido
 -- ======================
 CREATE TABLE Partido (
-    IdPartido INT AUTO_INCREMENT PRIMARY KEY,
-    Fecha DATETIME NOT NULL,
-    IdEquipoLocal INT NOT NULL,
-    PuntosLocal INT DEFAULT 0,
-    IdEquipoVisitante INT NOT NULL,
-    PuntosVisitante INT DEFAULT 0,
-    IdJornada INT NOT NULL,
-    FOREIGN KEY (IdJornada) REFERENCES Jornada(IdJornada),
-    FOREIGN KEY (IdEquipoLocal) REFERENCES Equipo(IdEquipo),
-    FOREIGN KEY (IdEquipoVisitante) REFERENCES Equipo(IdEquipo)
+    id_partido INT AUTO_INCREMENT PRIMARY KEY,
+    fecha DATETIME NOT NULL,
+    id_equipo_local INT NOT NULL,
+    puntos_local INT DEFAULT 0,
+    id_equipo_visitante INT NOT NULL,
+    puntos_visitante INT DEFAULT 0,
+    id_jornada INT NOT NULL,
+    FOREIGN KEY (id_jornada) REFERENCES Jornada(id_jornada) ON DELETE CASCADE,
+    FOREIGN KEY (id_equipo_local) REFERENCES Equipo(id_equipo),
+    FOREIGN KEY (id_equipo_visitante) REFERENCES Equipo(id_equipo)
 );
+
 
 -- ======================
 -- TABLA: Noticia
 -- ======================
 CREATE TABLE Noticia (
-    IdNoticia INT AUTO_INCREMENT PRIMARY KEY,
-    Titulo VARCHAR(150) NOT NULL,
-    Contenido TEXT NOT NULL,
-    FechaPublicacion DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Imagen VARCHAR(255),
-    IdUsuario INT NOT NULL,
-    FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario)
+    id_noticia INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(150) NOT NULL,
+    contenido TEXT NOT NULL,
+    fecha_publicacion DATETIME DEFAULT (CURRENT_TIMESTAMP),
+    imagen VARCHAR(255),
+    id_usuario INT NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario) ON DELETE CASCADE
 );
+
 
 -- ======================
 -- TABLA: Suscripción a Equipo (N:M)
 -- ======================
 CREATE TABLE SuscripcionEquipo (
-    IdUsuario INT NOT NULL,
-    IdEquipo INT NOT NULL,
-    FechaSuscripcion DATE DEFAULT (CURRENT_DATE),
-    PRIMARY KEY (IdUsuario, IdEquipo),
-    FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario),
-    FOREIGN KEY (IdEquipo) REFERENCES Equipo(IdEquipo)
+    id_usuario INT NOT NULL,
+    id_equipo INT NOT NULL,
+    fecha_suscripcion DATETIME DEFAULT (CURRENT_TIMESTAMP),
+    PRIMARY KEY (id_usuario, id_equipo),
+    FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_equipo) REFERENCES Equipo(id_equipo) ON DELETE CASCADE
 );
+
 
 -- ======================
 -- TABLA: Producto
 -- ======================
 CREATE TABLE Producto (
-    IdProducto INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre VARCHAR(50) NOT NULL,
-    Descripcion VARCHAR(100),
-    Precio DECIMAL(10,2) NOT NULL
+    id_producto INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(100),
+    precio DECIMAL(10,2) NOT NULL
 );
+
 
 -- ======================
 -- TABLA: Inventario
 -- ======================
 CREATE TABLE Inventario (
-    IdProducto INT NOT NULL,
-    Color VARCHAR(50) NOT NULL,
-    Talle ENUM('S','M','L','XL') NOT NULL,
-    Stock INT DEFAULT 0,
-    PRIMARY KEY (IdProducto, Color, Talle),
-    FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto)
+    id_producto INT NOT NULL,
+    color VARCHAR(50) NOT NULL,
+    talle ENUM('S','M','L','XL') NOT NULL,
+    stock INT DEFAULT 0,
+    PRIMARY KEY (id_producto, color, talle),
+    FOREIGN KEY (id_producto) REFERENCES Producto(id_producto) ON DELETE CASCADE
 );
+
 
 -- ======================
 -- TABLA: Carrito
 -- ======================
 CREATE TABLE Carrito (
-    IdCarrito INT AUTO_INCREMENT PRIMARY KEY,
-    IdUsuario INT NOT NULL,
-    FechaCreacion DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario)
+    id_carrito INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario) ON DELETE CASCADE
 );
+
 
 -- ======================
 -- TABLA: DetalleCarrito
 -- ======================
 CREATE TABLE DetalleCarrito (
-    IdCarrito INT NOT NULL,
-    IdProducto INT NOT NULL,
-    Cantidad INT NOT NULL,
-    PRIMARY KEY (IdCarrito, IdProducto),
-    FOREIGN KEY (IdCarrito) REFERENCES Carrito(IdCarrito),
-    FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto)
+    id_carrito INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL,
+    PRIMARY KEY (id_carrito, id_producto),
+    FOREIGN KEY (id_carrito) REFERENCES Carrito(id_carrito) ON DELETE CASCADE,
+    FOREIGN KEY (id_producto) REFERENCES Producto(id_producto) ON DELETE CASCADE
 );
+
 
 -- ======================
 -- TABLA: Compra
 -- ======================
 CREATE TABLE Compra (
-    IdCompra INT AUTO_INCREMENT PRIMARY KEY,
-    IdCarrito INT NOT NULL,
-    FechaCompra DATETIME DEFAULT CURRENT_TIMESTAMP,
-    MontoTotal DECIMAL(10,2) NOT NULL,
-    MetodoPago ENUM('Efectivo','Tarjeta','Transferencia','MercadoPago') NOT NULL,
-    FOREIGN KEY (IdCarrito) REFERENCES Carrito(IdCarrito)
+    id_compra INT AUTO_INCREMENT PRIMARY KEY,
+    id_carrito INT NOT NULL,
+    fecha_compra DATETIME DEFAULT CURRENT_TIMESTAMP,
+    monto_total DECIMAL(10,2) NOT NULL,
+    metodo_pago ENUM('Efectivo','Tarjeta','Transferencia','MercadoPago') NOT NULL,
+    FOREIGN KEY (id_carrito) REFERENCES Carrito(id_carrito) ON DELETE CASCADE
 );
-
-
-
