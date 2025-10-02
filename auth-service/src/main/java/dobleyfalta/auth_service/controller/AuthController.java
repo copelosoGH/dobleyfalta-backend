@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,20 +26,28 @@ public class AuthController {
     // En caso de éxito → ResponseEntity.ok(new LoginResponse(token))
     // En caso de error → ResponseEntity.status(401).body(Map.of(...))
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
 
-        var usuario = authService.login(request);
+            var usuario = authService.login(request);
 
-        if (usuario != null) {
-            return ResponseEntity.ok(new LoginResponse(usuario.getToken()));
-        } else {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    // Map.of Crea un mapa inmutable en Java (clave → valor).
-                    // En este caso:
-                    // "mensaje" → "Correo o contraseña incorrecta"
-                    // "codigoError" → 401
-                    // Resultado: un objeto tipo Map<String, Object> con esos pares clave-valor.
-                    // Es object para poder usar string, integer o lo que se necesite
+            if (usuario != null) {
+                return ResponseEntity.ok(new LoginResponse(usuario.getToken()));
+            } else {
+                return ResponseEntity
+                        .status(HttpStatus.UNAUTHORIZED)
+                        // Map.of Crea un mapa inmutable en Java (clave → valor).
+                        // En este caso:
+                        // "mensaje" → "Correo o contraseña incorrecta"
+                        // "codigoError" → 401
+                        // Resultado: un objeto tipo Map<String, Object> con esos pares clave-valor.
+                        // Es object para poder usar string, integer o lo que se necesite
+                        .body(Map.of(
+                                "mensaje", "Correo o contraseña incorrectas",
+                                "codigoError", 401));
+            }
+            // Esto es para que si el correo falla devuelva un error personalizado si no devolvia 500
+        } catch (HttpClientErrorException.NotFound e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of(
                             "mensaje", "Correo o contraseña incorrectas",
                             "codigoError", 401));
