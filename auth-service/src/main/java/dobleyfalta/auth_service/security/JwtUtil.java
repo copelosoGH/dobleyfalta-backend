@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class JwtUtil {
 
     // Genera un Key a partir de un String
-    private final Key SECRET_KEY = Keys.hmacShaKeyFor("miClaveSuperSecretaMuyLargaParaHS256!".getBytes());
+    private final Key SECRET_KEY = Keys.hmacShaKeyFor("conradoPelosoNaomiKakisuYEmanuelNeme".getBytes());
     private final long EXPIRATION = 1000 * 60 * 60; // 1 hora
 
     public String generateToken(String correo) {
@@ -20,13 +20,16 @@ public class JwtUtil {
                 .setSubject(correo)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(SECRET_KEY, SignatureAlgorithm.HS256) // usa Key
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
                 .compact();
     }
 
+    // se usa para leer el correo guardado dentro de un JWT (el subject del token enviado por el cliente).
+    // sirve para extraer la identidad (correo) del usuario autenticado desde el token JWT y 
+    // poder usarlo en tu lógica (ej: cargar su perfil, validar sus permisos).
     public String getCorreo(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY) // usa Key
+                .setSigningKey(SECRET_KEY)
                 .build()
                 .parseClaimsJws(token)
                 .getBody()

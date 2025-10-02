@@ -4,11 +4,8 @@ import dobleyfalta.auth_service.client.UsuarioClient;
 import dobleyfalta.auth_service.dto.LoginRequest;
 import dobleyfalta.auth_service.dto.LoginResponse;
 import dobleyfalta.auth_service.security.JwtUtil;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AuthService {
@@ -29,7 +26,7 @@ public class AuthService {
             String token = jwtUtil.generateToken(usuario.getCorreo());
             return new LoginResponse(token);
         } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Correo o contraseña incorrecta");
+            return null;
         }
     }
 }
