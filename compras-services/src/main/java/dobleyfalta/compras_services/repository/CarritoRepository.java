@@ -9,6 +9,10 @@ import dobleyfalta.compras_services.models.Carrito;
 
 @Repository
 public interface CarritoRepository extends JpaRepository<Carrito, Integer> {
+
+    Carrito findByIdCarrito(Integer idCarrito);
+
+    List<Carrito> findAll();
+
     
-    List<Carrito> findByIdUsuario(Integer idCarrito);
 }

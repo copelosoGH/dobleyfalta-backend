@@ -16,7 +16,25 @@ public class CarritoService {
         this.carritoRepository = carritoRepository;
     }
 
-    public List<Carrito> getCarritoRepository() {
-        return carritoRepository.findAll().stream().toList();
+    public List<Carrito> getAll() {
+        return carritoRepository.findAll();
+    }
+
+    public Carrito getCarritoById(Integer id) {
+        return carritoRepository.findByIdCarrito(id);
+    }
+
+    public Carrito crearCarrito(Carrito carrito) {
+        return carritoRepository.save(carrito);
+    }
+
+    public Carrito editarCarrito(Integer id, Carrito carrito) {
+        Carrito carritoEdit = carritoRepository.findByIdCarrito(id);
+        if (carritoEdit != null) {
+            carritoEdit.setIdUsuario(carrito.getIdUsuario());
+            carritoEdit.setFechaCreacion(carrito.getFechaCreacion());
+            return carritoRepository.save(carritoEdit);
+        }
+        return null;
     }
 }
