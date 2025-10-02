@@ -28,4 +28,11 @@ public class UsuarioController {
         Usuario usuario_guardado = service.createUsuario(usuario);
         return new ResponseEntity<>(usuario_guardado, HttpStatus.CREATED);
     }
+
+    @GetMapping("/correo/{correo}")
+    public ResponseEntity<Usuario> getByCorreo(@PathVariable String correo) {
+        return service.getByCorreo(correo)
+                .map(usuario -> ResponseEntity.ok(usuario))
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

@@ -5,6 +5,7 @@ import dobleyfalta.usuarios_service.repository.UsuarioRepository;
 import dobleyfalta.usuarios_service.model.Usuario;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -26,4 +27,8 @@ public class UsuarioService {
         usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
         return repo.save(usuario);
     }
+
+    public Optional<Usuario> getByCorreo(String correo) {
+    return repo.findByCorreo(correo);
+}
 }

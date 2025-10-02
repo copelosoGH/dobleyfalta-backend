@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Getter
 @Setter
 @Entity
@@ -24,7 +22,6 @@ public class Usuario {
     private String correo;
 
     @Column(name = "contrasena", nullable = false, length = 60)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // recibe en POST/PUT, no lo envía en GET
     private String contrasena;
 
     @Enumerated(EnumType.STRING)
