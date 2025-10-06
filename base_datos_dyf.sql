@@ -81,9 +81,7 @@ CREATE TABLE Noticia (
     titulo VARCHAR(150) NOT NULL,
     contenido TEXT NOT NULL,
     fecha_publicacion DATETIME DEFAULT (CURRENT_TIMESTAMP),
-    imagen VARCHAR(255),
-    id_usuario INT NOT NULL,
-    FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario) ON DELETE CASCADE
+    imagen VARCHAR(255)
 );
 
 
