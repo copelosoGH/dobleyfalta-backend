@@ -41,5 +41,4 @@ public class Carrito {
     @JoinColumn(name = "idCarrito")
     private List<DetalleCarrito> detalles = new ArrayList<>();
     
-    
 }

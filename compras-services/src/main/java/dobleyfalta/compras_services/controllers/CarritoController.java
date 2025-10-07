@@ -8,6 +8,7 @@ import dobleyfalta.compras_services.services.CarritoService;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,12 +51,22 @@ public class CarritoController {
         return ResponseEntity.ok(newCarrito);
     }
  
-    @PutMapping("/editar/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Carrito> editarCarrito(@PathVariable Integer id, @RequestBody Carrito carrito) {
         if (id == null || carrito == null) {
             return ResponseEntity.notFound().build();
         }
         Carrito actualizarCarrito = carritoService.editarCarrito(id, carrito);
         return ResponseEntity.ok(actualizarCarrito);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarCarrito(@PathVariable Integer id) {
+        boolean eliminado = carritoService.eliminarCarrito(id);
+        if (eliminado) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

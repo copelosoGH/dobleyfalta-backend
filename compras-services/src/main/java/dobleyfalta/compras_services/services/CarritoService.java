@@ -37,4 +37,13 @@ public class CarritoService {
         }
         return null;
     }
+
+    public boolean eliminarCarrito(Integer id) {
+        Carrito carrito = carritoRepository.findByIdCarrito(id);
+        if (carrito != null) {
+            carritoRepository.delete(carrito);
+            return true;
+        }
+        return false;
+    }
 }
