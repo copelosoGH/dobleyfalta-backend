@@ -1,4 +1,6 @@
-/* ackage dobleyfalta.productos_service.model;
+package dobleyfalta.productos_service.model;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,19 +15,16 @@ import lombok.NoArgsConstructor;
 
 public class Inventario {
 
-    @Id
-    @ManyToOne
+    @EmbeddedId
+    private InventarioId id;
+
+    @ManyToOne (fetch = FetchType.LAZY)
+    @MapsId("idProducto")
     @JoinColumn(name = "id_producto", nullable = false)
+    @JsonBackReference
     private Producto producto;
-
-    @Column(name = "color", length = 30)
-    public String color;
-
-    @Column(name = "talle", length = 1, nullable = false)
-    public String talle;
 
     @Column(name = "stock", nullable = false)
     public Integer stock;
-
+    
 }
- */

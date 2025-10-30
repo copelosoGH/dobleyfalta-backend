@@ -1,14 +1,14 @@
 package dobleyfalta.productos_service.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import java.util.ArrayList;
 
 @Entity
 @Data
@@ -32,8 +32,8 @@ public class Producto {
     @Column(name = "precio", nullable = false)
     private Double precio;
 
-    /* @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
-    private List<Inventario> inventario; */
-
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Inventario> inventario = new ArrayList<>();
 
 }
