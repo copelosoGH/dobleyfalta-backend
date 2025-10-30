@@ -5,6 +5,7 @@ import dobleyfalta.noticias_service.repository.NoticiaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,9 @@ public class NoticiaService {
 
     @Autowired
     private NoticiaRepository noticiaRepository;
+
+    @Autowired
+    private ImagenService imagenService;
 
     public List<Noticia> obtenerTodas() {
         return noticiaRepository.findAll();
@@ -23,6 +27,16 @@ public class NoticiaService {
     }
 
     public Noticia guardar(Noticia noticia) {
+        try {
+            if (noticia.getImagen() != null && !noticia.getImagen().isEmpty()) {
+                String nombreArchivo = "noticia_" + System.currentTimeMillis() + ".jpg";
+                String rutaGuardada = imagenService.guardarImagenBase64(noticia.getImagen(), nombreArchivo);
+                noticia.setImagen(rutaGuardada);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al guardar la imagen: " + e.getMessage());
+        }
+
         return noticiaRepository.save(noticia);
     }
 
