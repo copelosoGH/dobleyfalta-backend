@@ -1,17 +1,17 @@
 package dobleyfalta.equipo_service.DTO;
 
+import lombok.Data;
+
+@Data
 public class UsuarioDTO {
-    private Integer id;
+    private Integer idUsuario;
     private String nombre;
-    private String email;
+    private String correo;
 
     // Getters y setters
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getCorreo() { return correo; }
+    public void setCorreo(String correo) { this.correo = correo; }
 }

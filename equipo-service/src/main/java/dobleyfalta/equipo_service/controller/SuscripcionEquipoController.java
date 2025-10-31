@@ -19,7 +19,7 @@ public class SuscripcionEquipoController {
         this.suscripcionService = suscripcionService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<SuscripcionEquipoDTO>> getAll() {
         return ResponseEntity.ok(suscripcionService.getAll());
     }
@@ -34,7 +34,7 @@ public class SuscripcionEquipoController {
         return ResponseEntity.ok(suscripcionService.getByEquipo(idEquipo));
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<SuscripcionEquipo> suscribirse(
             @RequestParam Integer idUsuario,
             @RequestParam Integer idEquipo) {
@@ -42,7 +42,7 @@ public class SuscripcionEquipoController {
         return nueva != null ? ResponseEntity.ok(nueva) : ResponseEntity.badRequest().build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/id")
     public ResponseEntity<Void> eliminar(
             @RequestParam Integer idUsuario,
             @RequestParam Integer idEquipo) {

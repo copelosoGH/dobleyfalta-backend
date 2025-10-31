@@ -15,12 +15,12 @@ public class EquipoService {
     }
 
     // 🔹 Obtener todos los equipos
-    public List<Equipo> getAll() {
+    public List<Equipo> getEquiposAll() {
         return equipoRepository.findAll();
     }
 
     // 🔹 Obtener equipo por id
-    public Equipo getById(Integer id) {
+    public Equipo getEquipoById(Integer id) {
         return equipoRepository.findByIdEquipo(id);
     }
 

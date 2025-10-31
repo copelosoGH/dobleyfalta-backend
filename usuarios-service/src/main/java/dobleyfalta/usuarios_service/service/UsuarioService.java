@@ -23,6 +23,10 @@ public class UsuarioService {
         return repo.findAll();
     }
 
+    public Usuario getUsuarioById(Integer id){
+        return repo.getByIdUsuario(id);
+    }
+
     public Usuario createUsuario(Usuario usuario) {
         // Hashea la contraseña antes de guardar (si querés no hashearla, comenta esta
         // línea)

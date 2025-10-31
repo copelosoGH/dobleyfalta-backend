@@ -17,30 +17,30 @@ public class EquipoController {
         this.equipoService = equipoService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Equipo>> getAll() {
-        return ResponseEntity.ok(equipoService.getAll());
+    @GetMapping("/all")
+    public ResponseEntity<List<Equipo>> getEquiposAll() {
+        return ResponseEntity.ok(equipoService.getEquiposAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Equipo> getById(@PathVariable Integer id) {
-        Equipo equipo = equipoService.getById(id);
+    public ResponseEntity<Equipo> getEquipoById(@PathVariable Integer id) {
+        Equipo equipo = equipoService.getEquipoById(id);
         return equipo != null ? ResponseEntity.ok(equipo) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping
-    public ResponseEntity<Equipo> crear(@RequestBody Equipo equipo) {
+    @PostMapping("/add")
+    public ResponseEntity<Equipo> crearEquipo(@RequestBody Equipo equipo) {
         return ResponseEntity.ok(equipoService.crearEquipo(equipo));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Equipo> editar(@PathVariable Integer id, @RequestBody Equipo equipo) {
+    public ResponseEntity<Equipo> editarEquipo(@PathVariable Integer id, @RequestBody Equipo equipo) {
         Equipo editado = equipoService.editarEquipo(id, equipo);
         return editado != null ? ResponseEntity.ok(editado) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
+    public ResponseEntity<Void> eliminarEquipo(@PathVariable Integer id) {
         Equipo eliminado = equipoService.eliminarEquipo(id);
         return eliminado != null ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }

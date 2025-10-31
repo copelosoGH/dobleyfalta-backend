@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "suscripcion_equipo")
+@Table(name = "suscripcionequipo")
 public class SuscripcionEquipo {
 
     @EmbeddedId

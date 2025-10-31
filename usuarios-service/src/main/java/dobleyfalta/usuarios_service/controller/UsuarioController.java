@@ -10,8 +10,9 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/api/usuarios")
 public class UsuarioController {
 
     private final UsuarioService service;
@@ -20,10 +21,17 @@ public class UsuarioController {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Usuario> getUsuarios() {
         return service.getAllUsuarios();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> getUsuarioById(@PathVariable Integer id) {
+        Usuario usuario = service.getUsuarioById(id);
+        return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
+    }
+    
 
     @PostMapping
     public ResponseEntity<Usuario> createUsuario(@RequestBody Usuario usuario) {

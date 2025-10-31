@@ -11,7 +11,6 @@ public class EquipoDTO {
     
     private Integer id;
     private String nombre;
-    private String categoria;
     private String ciudad;
 
 }
