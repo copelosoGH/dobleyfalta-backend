@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        # 1. Servicio de Usuarios
+        - id: usuario-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/usuarios/**
+
+        # 2. Servicio de Autenticación
+        - id: auth-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/auth/**
+
+        # 3. Servicio de Noticias
+        - id: noticia-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/noticias/**
+
+        # 4. Servicio de Productos
+        - id: producto-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/productos/**
+
+        # 5. Servicio de Compras
+        - id: compra-service
+          uri: http://localhost:8085
+          predicates:
+            - Path=/api/compras/**
+
+        # 6. Servicio de Partidos
+        - id: partido-service
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/partidos/**
+
+        # 7. Servicio de Equipos
+        - id: equipo-service
+          uri: http://localhost:8087
+          predicates:
+            - Path=/api/equipos/**
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.web: DEBUG
