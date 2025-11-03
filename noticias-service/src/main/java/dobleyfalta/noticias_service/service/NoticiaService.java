@@ -5,6 +5,7 @@ import dobleyfalta.noticias_service.repository.NoticiaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -40,19 +41,37 @@ public class NoticiaService {
         return noticiaRepository.save(noticia);
     }
 
-    // El map solo se ejecuta si encuentra la noticia por id, hago esta logica para que podamos modificar 
-    // solo un atributo si queremos y que no de error.
-    // si no encuentra noticia ni se ejecuta el map y se va al .orElse y devuelve null
     public Noticia actualizar(Integer id, Noticia noticiaActualizada) {
         return noticiaRepository.findById(id).map(noticia -> {
             if (noticiaActualizada.getTitulo() != null)
                 noticia.setTitulo(noticiaActualizada.getTitulo());
             if (noticiaActualizada.getContenido() != null)
                 noticia.setContenido(noticiaActualizada.getContenido());
-            if (noticiaActualizada.getImagen() != null)
-                noticia.setImagen(noticiaActualizada.getImagen());
             if (noticiaActualizada.getFechaPublicacion() != null)
                 noticia.setFechaPublicacion(noticiaActualizada.getFechaPublicacion());
+
+            try {
+                String imagenNueva = noticiaActualizada.getImagen();
+                if (imagenNueva != null && !imagenNueva.isEmpty()) {
+
+                    String imagenVieja = noticia.getImagen();
+                    if (imagenVieja != null && !imagenVieja.isEmpty()) {
+                        File archivoViejo = new File(imagenVieja);
+                        if (archivoViejo.exists()) {
+                            boolean eliminada = archivoViejo.delete();
+                            if (!eliminada) {
+                                System.err.println("No se pudo eliminar la imagen vieja: " + imagenVieja);
+                            }
+                        }
+                    }
+                    
+                    String nombreArchivo = "noticia_" + System.currentTimeMillis() + ".jpg";
+                    String rutaGuardada = imagenService.guardarImagenBase64(imagenNueva, nombreArchivo);
+                    noticia.setImagen(rutaGuardada);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("Error al actualizar la imagen: " + e.getMessage());
+            }
 
             return noticiaRepository.save(noticia);
         }).orElse(null);
@@ -62,4 +81,3 @@ public class NoticiaService {
         noticiaRepository.deleteById(id);
     }
 }
-
