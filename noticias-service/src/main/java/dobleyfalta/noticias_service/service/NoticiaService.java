@@ -64,7 +64,7 @@ public class NoticiaService {
                             }
                         }
                     }
-                    
+
                     String nombreArchivo = "noticia_" + System.currentTimeMillis() + ".jpg";
                     String rutaGuardada = imagenService.guardarImagenBase64(imagenNueva, nombreArchivo);
                     noticia.setImagen(rutaGuardada);
@@ -78,6 +78,25 @@ public class NoticiaService {
     }
 
     public void eliminar(Integer id) {
-        noticiaRepository.deleteById(id);
+        Optional<Noticia> noticiaOptional = noticiaRepository.findById(id);
+
+        if (noticiaOptional.isPresent()) {
+            Noticia noticia = noticiaOptional.get();
+
+            String rutaImagen = noticia.getImagen();
+            if (rutaImagen != null && !rutaImagen.isEmpty()) {
+                File archivo = new File(rutaImagen);
+                if (archivo.exists()) {
+                    boolean eliminada = archivo.delete();
+                    if (!eliminada) {
+                        System.err.println("No se pudo eliminar la imagen: " + rutaImagen);
+                    }
+                }
+            }
+
+            noticiaRepository.deleteById(id);
+        } else {
+            System.err.println("No se encontró la noticia con ID: " + id);
+        }
     }
 }
