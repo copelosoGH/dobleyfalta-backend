@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class Usuario {
     private Integer idUsuario;
+    private String nombre;
     private String correo;
     private String contrasena;
     private String rol;

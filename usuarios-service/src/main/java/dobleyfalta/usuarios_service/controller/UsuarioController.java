@@ -5,11 +5,11 @@ import dobleyfalta.usuarios_service.service.UsuarioService;
 import dobleyfalta.usuarios_service.dto.UsuarioUpdateDTO;
 import dobleyfalta.usuarios_service.model.Usuario;
 import org.springframework.http.ResponseEntity;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Map;
-
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -31,12 +31,17 @@ public class UsuarioController {
         Usuario usuario = service.getUsuarioById(id);
         return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
     }
-    
 
     @PostMapping
-    public ResponseEntity<Usuario> createUsuario(@RequestBody Usuario usuario) {
-        Usuario usuario_guardado = service.createUsuario(usuario);
-        return new ResponseEntity<>(usuario_guardado, HttpStatus.CREATED);
+    public ResponseEntity<?> createUsuario(@RequestBody Usuario usuario) {
+        try {
+            Usuario usuario_guardado = service.createUsuario(usuario);
+            usuario_guardado.setContrasena(null);
+            return new ResponseEntity<>(usuario_guardado, HttpStatus.CREATED);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("mensaje", "El correo ya está registrado"));
+        }
     }
 
     @PutMapping("/{id}")
