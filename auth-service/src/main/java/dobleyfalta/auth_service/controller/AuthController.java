@@ -1,7 +1,6 @@
 package dobleyfalta.auth_service.controller;
 
 import dobleyfalta.auth_service.dto.LoginRequest;
-import dobleyfalta.auth_service.dto.LoginResponse;
 import dobleyfalta.auth_service.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -27,25 +26,18 @@ public class AuthController {
     // En caso de error → ResponseEntity.status(401).body(Map.of(...))
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
+            var response = authService.login(request);
 
-            var usuario = authService.login(request);
-
-            if (usuario != null) {
-                return ResponseEntity.ok(new LoginResponse(usuario.getToken()));
+            if (response != null) {
+                return ResponseEntity.ok(response);
             } else {
                 return ResponseEntity
                         .status(HttpStatus.UNAUTHORIZED)
-                        // Map.of Crea un mapa inmutable en Java (clave → valor).
-                        // En este caso:
-                        // "mensaje" → "Correo o contraseña incorrecta"
-                        // "codigoError" → 401
-                        // Resultado: un objeto tipo Map<String, Object> con esos pares clave-valor.
-                        // Es object para poder usar string, integer o lo que se necesite
                         .body(Map.of(
                                 "mensaje", "Correo o contraseña incorrectas",
                                 "codigoError", 401));
             }
-            // Esto es para que si el correo falla devuelva un error personalizado si no devolvia 500
+
         } catch (HttpClientErrorException.NotFound e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of(

@@ -8,13 +8,13 @@ import org.springframework.web.client.RestTemplate;
 public class UsuarioClient {
 
     private final RestTemplate restTemplate;
-    private static final String BASE_URL = "http://localhost:8081"; // puerto de usuarios-service
+    private static final String BASE_URL = "http://localhost:8080";
 
     public UsuarioClient() {
         this.restTemplate = new RestTemplate();
     }
 
     public Usuario getByCorreo(String correo) {
-        return restTemplate.getForObject(BASE_URL + "/usuarios/correo/{correo}", Usuario.class, correo);
+        return restTemplate.getForObject(BASE_URL + "/api/usuarios/correo/{correo}", Usuario.class, correo);
     }
 }

@@ -23,8 +23,8 @@ public class AuthService {
         var usuario = usuarioClient.getByCorreo(request.getCorreo());
 
         if (passwordEncoder.matches(request.getContrasena(), usuario.getContrasena())) {
-            String token = jwtUtil.generateToken(usuario.getCorreo());
-            return new LoginResponse(token);
+            String token = jwtUtil.generateToken(usuario.getIdUsuario().toString());
+            return new LoginResponse(token, usuario);
         } else {
             return null;
         }

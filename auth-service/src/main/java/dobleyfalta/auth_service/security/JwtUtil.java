@@ -15,19 +15,19 @@ public class JwtUtil {
     private final Key SECRET_KEY = Keys.hmacShaKeyFor("conradoPelosoNaomiKakisuYEmanuelNeme".getBytes());
     private final long EXPIRATION = 1000 * 60 * 60; // 1 hora
 
-    public String generateToken(String correo) {
+    public String generateToken(String id) {
         return Jwts.builder()
-                .setSubject(correo)
+                .setSubject(id)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // se usa para leer el correo guardado dentro de un JWT (el subject del token enviado por el cliente).
-    // sirve para extraer la identidad (correo) del usuario autenticado desde el token JWT y 
+    // se usa para leer el id guardado dentro de un JWT (el subject del token enviado por el cliente).
+    // sirve para extraer la identidad del usuario autenticado desde el token JWT y 
     // poder usarlo en tu lógica (ej: cargar su perfil, validar sus permisos).
-    public String getCorreo(String token) {
+    public String getId(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(SECRET_KEY)
                 .build()
