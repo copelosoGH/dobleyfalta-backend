@@ -45,10 +45,15 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> updateUsuario(@PathVariable Integer id, @RequestBody UsuarioUpdateDTO dto) {
-
-        Usuario usuarioActualizado = service.updateUsuario(id, dto);
-        return ResponseEntity.ok(usuarioActualizado);
+    public ResponseEntity<?> updateUsuario(@PathVariable Integer id, @RequestBody UsuarioUpdateDTO dto) {
+        try {
+            Usuario usuarioActualizado = service.updateUsuario(id, dto);
+            usuarioActualizado.setContrasena(null);
+            return ResponseEntity.ok(usuarioActualizado);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("mensaje", "El correo ya está registrado"));
+        }
     }
 
     @GetMapping("/correo/{correo}")

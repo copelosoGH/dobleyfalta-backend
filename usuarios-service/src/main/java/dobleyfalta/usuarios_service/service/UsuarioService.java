@@ -50,7 +50,9 @@ public class UsuarioService {
             usuarioExistente.setContrasena(passwordEncoder.encode(dto.getNuevaContrasena()));
         }
 
-        usuarioExistente.setRol(dto.getRol());
+        if(dto.getRol() != null) {
+            usuarioExistente.setRol(dto.getRol());
+        }
 
         return repo.save(usuarioExistente);
     }
