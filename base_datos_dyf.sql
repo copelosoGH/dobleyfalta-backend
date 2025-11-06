@@ -1,4 +1,4 @@
--- Active: 1759343905202@@127.0.0.1@3306
+-- Active: 1729614686330@@127.0.0.1@3306@ligaparanabasquet
 DROP DATABASE IF EXISTS LigaParanaBasquet;
 CREATE DATABASE LigaParanaBasquet;
 USE LigaParanaBasquet;
@@ -157,3 +157,7 @@ CREATE TABLE Compra (
     metodo_pago ENUM('Efectivo','Tarjeta','Transferencia','MercadoPago') NOT NULL,
     FOREIGN KEY (id_carrito) REFERENCES Carrito(id_carrito) ON DELETE CASCADE
 );
+
+ALTER TABLE equipo
+ADD COLUMN lat DOUBLE,
+ADD COLUMN lng DOUBLE;

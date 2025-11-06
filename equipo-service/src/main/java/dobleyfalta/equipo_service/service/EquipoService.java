@@ -19,12 +19,10 @@ public class EquipoService {
         this.imagenService = imagenService;
     }
 
-    // Obtener todos los equipos
     public List<Equipo> getEquiposAll() {
         return equipoRepository.findAll();
     }
 
-    // Obtener equipo por id
     public Equipo getEquipoById(Integer id) {
         return equipoRepository.findByIdEquipo(id);
     }
@@ -45,20 +43,36 @@ public class EquipoService {
     public Equipo editarEquipo(Integer id, Equipo equipo) {
         Equipo equipoEdit = equipoRepository.findByIdEquipo(id);
         if (equipoEdit != null) {
-            if (equipo.getNombre() != null)
+            if (equipo.getNombre() != null) {
                 equipoEdit.setNombre(equipo.getNombre());
-            if (equipo.getCiudad() != null)
+            }
+
+            if (equipo.getCiudad() != null) {
                 equipoEdit.setCiudad(equipo.getCiudad());
-            if (equipo.getDireccion() != null)
+            }
+
+            if (equipo.getDireccion() != null) {
                 equipoEdit.setDireccion(equipo.getDireccion());
-            if (equipo.getDescripcion() != null)
+            }
+
+            if (equipo.getDescripcion() != null) {
                 equipoEdit.setDescripcion(equipo.getDescripcion());
-            if (equipo.getIdLiga() != null)
+            }
+
+            if (equipo.getIdLiga() != null) {
                 equipoEdit.setIdLiga(equipo.getIdLiga());
+            }
+
+            if (equipo.getLat() != null) {
+                equipoEdit.setLat(equipo.getLat());
+            }
+
+            if (equipo.getLng() != null) {
+                equipoEdit.setLng(equipo.getLng());
+            }
 
             try {
                 if (equipo.getLogo() != null && !equipo.getLogo().isEmpty()) {
-                    // eliminar logo viejo
                     if (equipoEdit.getLogo() != null && !equipoEdit.getLogo().isEmpty()) {
                         File viejo = new File(equipoEdit.getLogo());
                         if (viejo.exists())
@@ -83,11 +97,12 @@ public class EquipoService {
         if (equipo != null) {
             if (equipo.getLogo() != null && !equipo.getLogo().isEmpty()) {
                 File archivo = new File(equipo.getLogo());
-                if (archivo.exists()) archivo.delete();
+                if (archivo.exists())
+                    archivo.delete();
             }
             equipoRepository.delete(equipo);
             return equipo;
-        } 
+        }
         return null;
     }
 }

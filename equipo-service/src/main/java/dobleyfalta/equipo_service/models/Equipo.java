@@ -17,7 +17,7 @@ public class Equipo {
     @Column(name = "id_equipo")
     private Integer idEquipo;
 
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false)
     private String nombre;
 
     @Column(name = "ciudad")
@@ -32,6 +32,12 @@ public class Equipo {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @Column(name = "id_liga")
-    private Integer idLiga;  // relación con la tabla LIGA (solo el id)
+    @Column(name = "id_liga", nullable = false)
+    private Integer idLiga;  
+
+    @Column(name = "lat")
+    private Double lat;
+
+    @Column(name = "lng")
+    private Double lng;
 }

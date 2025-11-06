@@ -58,6 +58,11 @@ spring:
           predicates:
             - Path=/api/equipos/**
 
+        - id: equipo-uploads
+          uri: http://localhost:8087
+          predicates:
+            - Path=/uploads/equipos/**
+
 server:
   port: 8080
 
