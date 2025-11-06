@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.core.io.Resource;
 
 @RestController
-@RequestMapping("/uploads")
+@RequestMapping("/imagenes/noticias")
 public class UploadController {
 
-    private final Path uploadDir = Paths.get("uploads");
+    private final Path uploadDir = Paths.get("uploads/noticias");
 
     @GetMapping("/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {

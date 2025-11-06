@@ -14,37 +14,49 @@ public class EquipoService {
         this.equipoRepository = equipoRepository;
     }
 
-    // 🔹 Obtener todos los equipos
+    // Obtener todos los equipos
     public List<Equipo> getEquiposAll() {
         return equipoRepository.findAll();
     }
 
-    // 🔹 Obtener equipo por id
+    // Obtener equipo por id
     public Equipo getEquipoById(Integer id) {
         return equipoRepository.findByIdEquipo(id);
     }
 
-    // 🔹 Crear equipo
+    // Crear equipo
     public Equipo crearEquipo(Equipo equipo) {
         return equipoRepository.save(equipo);
     }
 
-    // 🔹 Editar equipo
+    // Editar equipo
     public Equipo editarEquipo(Integer id, Equipo equipo) {
-        Equipo equipoEdit = equipoRepository.findByIdEquipo(id);
-        if (equipoEdit != null) {
+    Equipo equipoEdit = equipoRepository.findByIdEquipo(id);
+    if (equipoEdit != null) {
+        if (equipo.getNombre() != null) {
             equipoEdit.setNombre(equipo.getNombre());
-            equipoEdit.setCiudad(equipo.getCiudad());
-            equipoEdit.setDireccion(equipo.getDireccion());
-            equipoEdit.setLogo(equipo.getLogo());
-            equipoEdit.setDescripcion(equipo.getDescripcion());
-            equipoEdit.setIdLiga(equipo.getIdLiga());
-            return equipoRepository.save(equipoEdit);
         }
-        return null;
-    }
+        if (equipo.getCiudad() != null) {
+            equipoEdit.setCiudad(equipo.getCiudad());
+        }
+        if (equipo.getDireccion() != null) {
+            equipoEdit.setDireccion(equipo.getDireccion());
+        }
+        if (equipo.getLogo() != null) {
+            equipoEdit.setLogo(equipo.getLogo());
+        }
+        if (equipo.getDescripcion() != null) {
+            equipoEdit.setDescripcion(equipo.getDescripcion());
+        }
+        if (equipo.getIdLiga() != null) {
+            equipoEdit.setIdLiga(equipo.getIdLiga());
+        }
 
-    // 🔹 Eliminar equipo
+        return equipoRepository.save(equipoEdit);
+    }
+    return null;
+}
+
     public Equipo eliminarEquipo(Integer id) {
         Equipo equipo = equipoRepository.findByIdEquipo(id);
         if (equipo != null) {

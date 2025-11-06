@@ -9,7 +9,7 @@ import java.util.Base64;
 @Service
 public class ImagenService {
 
-    private static final String UPLOAD_DIR = "uploads/";
+    private static final String UPLOAD_DIR = "uploads/noticias/";
 
     public String guardarImagenBase64(String base64, String nombreArchivo) throws IOException {
         // Crear carpeta si no existe
