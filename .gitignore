@@ -34,3 +34,4 @@ replay_pid*
 # OS-specific files
 .DS_Store
 Thumbs.db
+/equipo-service/uploads
