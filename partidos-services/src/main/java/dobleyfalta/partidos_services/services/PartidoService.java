@@ -48,6 +48,7 @@ public class PartidoService {
         dto.setFecha(partido.getFecha());
         dto.setPuntosLocal(partido.getPuntosLocal());
         dto.setPuntosVisitante(partido.getPuntosVisitante());
+        dto.setEstado(partido.getEstadoPartido());
         return dto;
     }
 

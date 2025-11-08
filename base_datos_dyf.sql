@@ -1,4 +1,4 @@
--- Active: 1729614686330@@127.0.0.1@3306@ligaparanabasquet
+-- Active: 1739467802696@@127.0.0.1@3306@dobleyfalta
 DROP DATABASE IF EXISTS LigaParanaBasquet;
 CREATE DATABASE LigaParanaBasquet;
 USE LigaParanaBasquet;
@@ -161,3 +161,6 @@ CREATE TABLE Compra (
 ALTER TABLE equipo
 ADD COLUMN lat DOUBLE,
 ADD COLUMN lng DOUBLE;
+
+ALTER TABLE partido
+ADD COLUMN estado ENUM('proximo', 'en vivo', 'terminado') NOT NULL DEFAULT 'proximo';

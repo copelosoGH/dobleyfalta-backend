@@ -8,7 +8,7 @@ import dobleyfalta.partidos_services.models.Liga;
 import dobleyfalta.partidos_services.services.LigaService;
 
 @RestController
-@RequestMapping("/api/liga")
+@RequestMapping("/api/ligas")
 public class LigaController {
 
     private final LigaService ligaService;

@@ -8,7 +8,7 @@ import dobleyfalta.partidos_services.models.Jornada;
 import dobleyfalta.partidos_services.services.JornadaService;
 
 @RestController
-@RequestMapping("/api/jornada")
+@RequestMapping("/api/jornadas")
 public class JornadaController {
 
     private final JornadaService jornadaService;

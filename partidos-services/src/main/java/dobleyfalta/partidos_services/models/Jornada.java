@@ -2,6 +2,8 @@ package dobleyfalta.partidos_services.models;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,5 +32,6 @@ public class Jornada {
 
     @ManyToOne
     @JoinColumn(name = "id_liga")
+    @JsonBackReference
     private Liga liga;
 }

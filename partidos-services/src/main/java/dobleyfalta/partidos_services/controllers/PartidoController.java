@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/api/partido")
+@RequestMapping("/api/partidos")
 public class PartidoController {
     
     private final PartidoService partidoService;
@@ -33,7 +33,7 @@ public class PartidoController {
         return ResponseEntity.ok(partidoService.getAll());
     }
     
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity<Partido> getPartidoById(@PathVariable Integer id) {
         if (id == null) {
             return ResponseEntity.notFound().build();

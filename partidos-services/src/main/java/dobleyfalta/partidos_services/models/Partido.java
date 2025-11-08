@@ -4,6 +4,8 @@ import java.sql.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,4 +47,8 @@ public class Partido {
     @ManyToOne
     @JoinColumn(name = "id_jornada")
     private Jornada jornada;
+
+    @Enumerated(EnumType.STRING) // Le dice a JPA que almacene el nombre del enum como string
+    @Column(name = "estado", nullable = false) // Mapea a la columna 'estado' de la DB
+    private EstadoPartido estadoPartido;
 }

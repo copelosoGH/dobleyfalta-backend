@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/api/carrito")
+@RequestMapping("/api/carritos")
 public class CarritoController {
 
     private final CarritoService carritoService;

@@ -49,8 +49,13 @@ spring:
         - id: liga-service
           uri: http://localhost:8086
           predicates:
-            - Path=/api/liga/**
+            - Path=/api/ligas/**
 
+        # Servicio de Jornadas (dentro del microservicio de partidos)
+        - id: jornada-service
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/jornadas/**
 
         # 7. Servicio de Equipos
         - id: equipo-service

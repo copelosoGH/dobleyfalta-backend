@@ -3,6 +3,8 @@ package dobleyfalta.partidos_services.models;
 import java.sql.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,5 +35,6 @@ public class Liga {
     private Integer anio;
 
     @OneToMany(mappedBy = "liga", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Jornada> jornadas;
 }
