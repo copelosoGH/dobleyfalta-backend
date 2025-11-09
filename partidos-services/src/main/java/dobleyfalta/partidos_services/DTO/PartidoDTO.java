@@ -1,6 +1,6 @@
 package dobleyfalta.partidos_services.DTO;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import dobleyfalta.partidos_services.models.EstadoPartido;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PartidoDTO {
     private Integer idPartido;
-    private Date fecha;
+    private LocalDateTime fecha;
     private Integer puntosLocal;
     private Integer puntosVisitante;
     private EstadoPartido estado;

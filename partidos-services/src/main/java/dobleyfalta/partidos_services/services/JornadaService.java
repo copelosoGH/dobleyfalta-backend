@@ -24,6 +24,10 @@ public class JornadaService {
         return jornadaRepository.findByIdJornada(id);
     }
 
+    public List<Jornada> getJornadasByLiga(Integer idLiga) {
+        return jornadaRepository.findByLigaIdLiga(idLiga);
+    }
+
     public Jornada crearJornada(Jornada jornada) {
         return jornadaRepository.save(jornada);
     }

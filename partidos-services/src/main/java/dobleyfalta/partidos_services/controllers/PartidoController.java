@@ -40,6 +40,15 @@ public class PartidoController {
         }
         return ResponseEntity.ok(partidoService.getPartidoById(id));
     }
+
+    @GetMapping("/jornadas/{jornadaId}")
+    public ResponseEntity<List<Partido>> getPartidosByJornada(@PathVariable Integer jornadaId) {
+        if (jornadaId == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        List<Partido> partidos = partidoService.getPartidosByJornada(jornadaId);
+        return ResponseEntity.ok(partidos);
+    }
     
     @PostMapping("/add")
     public ResponseEntity<Partido> addCarrito(@RequestBody Partido partido) {

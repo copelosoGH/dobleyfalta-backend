@@ -163,4 +163,7 @@ ADD COLUMN lat DOUBLE,
 ADD COLUMN lng DOUBLE;
 
 ALTER TABLE partido
-ADD COLUMN estado ENUM('proximo', 'en vivo', 'terminado') NOT NULL DEFAULT 'proximo';
+ADD COLUMN estado ENUM('proximo', 'en_vivo', 'terminado');
+
+ALTER TABLE partido
+DROP COLUMN estado;

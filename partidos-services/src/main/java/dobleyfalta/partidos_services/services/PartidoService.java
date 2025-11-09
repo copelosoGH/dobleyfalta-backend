@@ -32,6 +32,10 @@ public class PartidoService {
         return partidoRespository.findByIdPartido(id);
     }
 
+    public List<Partido> getPartidosByJornada(Integer jornadaId) {
+        return partidoRespository.findByJornadaIdJornada(jornadaId);
+    }
+
     public PartidoDTO getPartidoConEquipos(Integer id) {
         Partido partido = partidoRespository.findByIdPartido(id);
         if (partido == null) {

@@ -31,6 +31,16 @@ public class JornadaController {
         return ResponseEntity.ok(jornada);
     }
 
+    @GetMapping("/ligas/{ligaId}")
+    public ResponseEntity<List<Jornada>> getJornadasByLiga(@PathVariable Integer ligaId) {
+        if (ligaId == null) {
+            return ResponseEntity.badRequest().build(); 
+        }
+        List<Jornada> jornadas = jornadaService.getJornadasByLiga(ligaId);
+
+        return ResponseEntity.ok(jornadas); 
+    }
+
     @PostMapping("/add")
     public ResponseEntity<Jornada> addJornada(@RequestBody Jornada jornada) {
         Jornada nuevaJornada = jornadaService.crearJornada(jornada);

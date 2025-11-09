@@ -1,6 +1,6 @@
 package dobleyfalta.partidos_services.models;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,7 +30,7 @@ public class Partido {
     private Integer idPartido;
 
     @Column(name = "fecha")
-    private Date fecha;
+    private LocalDateTime fecha;
 
     @Column(name = "puntos_local")
     private Integer puntosLocal;
