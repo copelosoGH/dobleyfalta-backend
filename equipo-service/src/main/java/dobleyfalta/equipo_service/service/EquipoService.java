@@ -3,6 +3,8 @@ package dobleyfalta.equipo_service.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import dobleyfalta.equipo_service.models.Equipo;
 import dobleyfalta.equipo_service.repository.EquipoRepository;
@@ -94,7 +96,10 @@ public class EquipoService {
 
     public Equipo eliminarEquipo(Integer id) {
         Equipo equipo = equipoRepository.findByIdEquipo(id);
-        if (equipo != null) {
+        if (equipo == null)
+            return null;
+
+        try {
             if (equipo.getLogo() != null && !equipo.getLogo().isEmpty()) {
                 File archivo = new File(equipo.getLogo());
                 if (archivo.exists())
@@ -102,7 +107,9 @@ public class EquipoService {
             }
             equipoRepository.delete(equipo);
             return equipo;
+
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("No se puede eliminar el equipo porque está asociado a partidos.", e);
         }
-        return null;
     }
 }
