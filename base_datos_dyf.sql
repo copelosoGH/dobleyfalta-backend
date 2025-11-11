@@ -1,4 +1,4 @@
--- Active: 1739467802696@@127.0.0.1@3306@dobleyfalta
+-- Active: 1729614686330@@127.0.0.1@3306@ligaparanabasquet
 DROP DATABASE IF EXISTS LigaParanaBasquet;
 CREATE DATABASE LigaParanaBasquet;
 USE LigaParanaBasquet;
@@ -165,5 +165,216 @@ ADD COLUMN lng DOUBLE;
 ALTER TABLE partido
 ADD COLUMN estado ENUM('proximo', 'en_vivo', 'terminado');
 
-ALTER TABLE partido
-DROP COLUMN estado;
+CREATE TABLE Auditoria (
+    id_auditoria INT AUTO_INCREMENT PRIMARY KEY,
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    accion VARCHAR(50),
+    tabla_afectada VARCHAR(50),
+    id_registro_afectado INT,
+    detalle VARCHAR(255)
+);
+
+DELIMITER //
+
+CREATE TRIGGER trg_usuario_insert
+AFTER INSERT ON Usuario
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditoria (accion, tabla_afectada, id_registro_afectado, detalle)
+    VALUES (
+        'ALTA', 
+        'Usuario', 
+        NEW.id_usuario, 
+        CONCAT('Se creó el usuario: ', NEW.nombre)
+    );
+END;
+//
+
+CREATE TRIGGER trg_usuario_update
+AFTER UPDATE ON Usuario
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditoria (accion, tabla_afectada, id_registro_afectado, detalle)
+    VALUES (
+        'MODIFICACION',
+        'Usuario',
+        NEW.id_usuario,
+        CONCAT('Se modificó el usuario: ', NEW.nombre)
+    );
+END;
+//
+
+CREATE TRIGGER trg_usuario_delete
+BEFORE DELETE ON Usuario
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditoria (accion, tabla_afectada, id_registro_afectado, detalle)
+    VALUES (
+        'BAJA',
+        'Usuario',
+        OLD.id_usuario,
+        CONCAT('Se eliminó el usuario: ', OLD.nombre)
+    );
+END;
+//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER trg_equipo_insert
+AFTER INSERT ON Equipo
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditoria (accion, tabla_afectada, id_registro_afectado, detalle)
+    VALUES (
+        'ALTA',
+        'Equipo',
+        NEW.id_equipo,
+        CONCAT('Se creó el equipo: ', NEW.nombre)
+    );
+END;
+//
+
+CREATE TRIGGER trg_equipo_update
+AFTER UPDATE ON Equipo
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditoria (accion, tabla_afectada, id_registro_afectado, detalle)
+    VALUES (
+        'MODIFICACION',
+        'Equipo',
+        NEW.id_equipo,
+        CONCAT('Se modificó el equipo: ', NEW.nombre)
+    );
+END;
+//
+
+CREATE TRIGGER trg_equipo_delete
+BEFORE DELETE ON Equipo
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditoria (accion, tabla_afectada, id_registro_afectado, detalle)
+    VALUES (
+        'BAJA',
+        'Equipo',
+        OLD.id_equipo,
+        CONCAT('Se eliminó el equipo: ', OLD.nombre)
+    );
+END;
+//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER trg_noticia_insert
+AFTER INSERT ON Noticia
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditoria (accion, tabla_afectada, id_registro_afectado, detalle)
+    VALUES (
+        'ALTA',
+        'Noticia',
+        NEW.id_noticia,
+        CONCAT('Se creó la noticia: ', NEW.titulo)
+    );
+END;
+//
+
+CREATE TRIGGER trg_noticia_update
+AFTER UPDATE ON Noticia
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditoria (accion, tabla_afectada, id_registro_afectado, detalle)
+    VALUES (
+        'MODIFICACION',
+        'Noticia',
+        NEW.id_noticia,
+        CONCAT('Se modificó la noticia: ', NEW.titulo)
+    );
+END;
+//
+
+CREATE TRIGGER trg_noticia_delete
+BEFORE DELETE ON Noticia
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditoria (accion, tabla_afectada, id_registro_afectado, detalle)
+    VALUES (
+        'BAJA',
+        'Noticia',
+        OLD.id_noticia,
+        CONCAT('Se eliminó la noticia: ', OLD.titulo)
+    );
+END;
+//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER trg_partido_insert
+AFTER INSERT ON Partido
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditoria (accion, tabla_afectada, id_registro_afectado, detalle)
+    VALUES (
+        'ALTA',
+        'Partido',
+        NEW.id_partido,
+        CONCAT(
+            'Se creó el partido entre el equipo local ID ',
+            NEW.id_equipo_local,
+            ' y el equipo visitante ID ',
+            NEW.id_equipo_visitante,
+            ' con fecha ',
+            DATE_FORMAT(NEW.fecha, '%Y-%m-%d %H:%i')
+        )
+    );
+END;
+//
+
+CREATE TRIGGER trg_partido_update
+AFTER UPDATE ON Partido
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditoria (accion, tabla_afectada, id_registro_afectado, detalle)
+    VALUES (
+        'MODIFICACION',
+        'Partido',
+        NEW.id_partido,
+        CONCAT(
+            'Se modificó el partido entre local ID ',
+            NEW.id_equipo_local,
+            ' y visitante ID ',
+            NEW.id_equipo_visitante,
+            '. Nuevo estado: ',
+            NEW.estado
+        )
+    );
+END;
+//
+
+CREATE TRIGGER trg_partido_delete
+BEFORE DELETE ON Partido
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditoria (accion, tabla_afectada, id_registro_afectado, detalle)
+    VALUES (
+        'BAJA',
+        'Partido',
+        OLD.id_partido,
+        CONCAT(
+            'Se eliminó el partido entre el equipo local ID ',
+            OLD.id_equipo_local,
+            ' y el visitante ID ',
+            OLD.id_equipo_visitante,
+            ' que se jugaba el ',
+            DATE_FORMAT(OLD.fecha, '%Y-%m-%d %H:%i')
+        )
+    );
+END;
+//
+
+DELIMITER ;
