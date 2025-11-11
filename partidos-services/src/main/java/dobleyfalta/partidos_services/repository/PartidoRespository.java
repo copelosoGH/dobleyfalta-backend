@@ -16,4 +16,6 @@ public interface PartidoRespository extends JpaRepository<Partido, Integer>{
     List<Partido> findAll();
 
     List<Partido> findByJornadaIdJornada(Integer idJornada);
+    
+    List<Partido> findByJornada_Liga_IdLiga(Integer idLiga);
 }
