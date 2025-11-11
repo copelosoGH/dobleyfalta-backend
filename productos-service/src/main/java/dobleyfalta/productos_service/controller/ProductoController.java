@@ -2,6 +2,7 @@ package dobleyfalta.productos_service.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,29 +26,80 @@ public class ProductoController {
     }
 
     @GetMapping("/all")
-    public List<Producto> listarProductos() {
-        return productoService.getAllProductos();
+    public ResponseEntity<List<Producto>> listarProductos() {
+        return ResponseEntity.ok(productoService.getAllProductos());
     }
 
     @GetMapping("/{id}")
-    public Producto obtenerProducto(@PathVariable Integer id) {
-        return productoService.getProductoById(id);
+    public ResponseEntity<Producto> obtenerProducto(@PathVariable Integer id) {
+        Producto producto = productoService.getProductoById(id);
+        if (producto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(producto);
     }
 
     @PostMapping
-    public Producto crearProducto(@RequestBody Producto producto) {
-        return productoService.saveProducto(producto);
+    public ResponseEntity<Producto> crearProducto(@RequestBody Producto producto) {
+        return ResponseEntity.ok(productoService.guardarProducto(producto));
     }
 
     @PutMapping("/{id}")
-    public Producto updateProducto(@PathVariable Integer id, @RequestBody Producto producto) {
-        producto.setIdProducto(id);
-        return productoService.saveProducto(producto);
+    public ResponseEntity<Producto> actualizarProducto(@PathVariable Integer id, @RequestBody Producto producto) {
+        Producto existe = productoService.getProductoById(id);
+        if (existe == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // actualiza los campos solo si vienen del body
+        if (producto.getNombre() != null) existe.setNombre(producto.getNombre());
+        if (producto.getDescripcion() != null) existe.setDescripcion(producto.getDescripcion());
+        if (producto.getPrecio() != null) existe.setPrecio(producto.getPrecio());
+
+        // actualiza el inventario solo si viene en el body, sin borrar el inventario actual
+        if (producto.getInventario() != null     ){   // && !producto.getInventario().isEmpty()) {
+            for (var invNuevo : producto.getInventario()) {
+                // Buscar si ese color/talle ya existe
+                var existente = existe.getInventario().stream()
+                    .filter(i -> i.getId().equals(invNuevo.getId()))
+                    .findFirst()
+                    .orElse(null);
+
+                if (existente!=null) {
+                    // actualiza los datos existentes del inventario
+                    existente.setStock(invNuevo.getStock());
+                    /* // actualiza color y talle dentro del objeto InventarioId PUEDE NO SER NECESARIO
+                    invExistente.getId().setColor(invNuevo.getId().getColor());
+                    invExistente.getId().setTalle(invNuevo.getId().getTalle()); */
+                } else {
+                    // si no existe, lo agrega
+                    // var nuevo = new Inventario();
+                    // nuevo.setId(invNuevo.getId());
+                    // nuevo.setStock(invNuevo.getStock());
+                    // nuevo.setProducto(existe);
+                    // existe.getInventario().add(invNuevo);
+                    invNuevo.setProducto(existe);
+                    invNuevo.getId().setIdProducto(existe.getIdProducto());
+                    existe.getInventario().add(invNuevo);
+                }
+            }
+        }
+        // asegurar referencia bidireccional antes de guardar
+        existe.getInventario().forEach(inv -> inv.setProducto(existe));
+
+        Producto actualizado = productoService.guardarProducto(existe);
+        return ResponseEntity.ok(actualizado);
+
     }
 
     @DeleteMapping("/{id}")
-    public void eliminarProducto(@PathVariable Integer id) {
-        productoService.deleteProducto(id);
+    public ResponseEntity<Void> eliminarProducto(@PathVariable Integer id) {
+        if (productoService.getProductoById(id) == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        productoService.eliminarProducto(id);
+        return ResponseEntity.noContent().build();
     }
 
     
