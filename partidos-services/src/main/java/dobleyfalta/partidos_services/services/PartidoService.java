@@ -3,25 +3,31 @@ package dobleyfalta.partidos_services.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import dobleyfalta.partidos_services.DTO.EquipoDTO;
+import dobleyfalta.partidos_services.DTO.MarcadorUpdatedRequest;
 import dobleyfalta.partidos_services.DTO.PartidoDTO;
+import dobleyfalta.partidos_services.events.PartidoUpdatedEvent;
 import dobleyfalta.partidos_services.models.Partido;
 import dobleyfalta.partidos_services.repository.PartidoRespository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class PartidoService {
 
     private final PartidoRespository partidoRespository;
     private final RestTemplate restTemplate;
+    private final ApplicationEventPublisher eventPublisher;
 
     private final String EQUIPO_SERVICE_URL = "http://localhost:8080/api/equipos/";
 
-    public PartidoService(PartidoRespository partidoRespository, RestTemplate restTemplate) {
+    public PartidoService(PartidoRespository partidoRespository, RestTemplate restTemplate, ApplicationEventPublisher eventPublisher) {
         this.partidoRespository = partidoRespository;
         this.restTemplate = restTemplate;
+        this.eventPublisher = eventPublisher;
     }
 
     public List<Partido> getAll() {
@@ -71,6 +77,35 @@ public class PartidoService {
             return partidoRespository.save(partidoEdit);
         }
         return null;
+    }
+
+    @Transactional
+    public boolean updatedMarcador(Integer partidoId, MarcadorUpdatedRequest request) {
+        
+        // 1. Validar y Actualizar DB
+        int updatedRows = 0;
+        String equipo = request.getEquipo().toUpperCase();
+        Integer puntos = request.getPuntos();
+
+        if ("LOCAL".equals(equipo)) {
+            updatedRows = partidoRespository.updatePuntosLocal(partidoId, puntos);
+        } else if ("VISITANTE".equals(equipo)) {
+            updatedRows = partidoRespository.updatePuntosVisitante(partidoId, puntos);
+        } else {
+            // Equipo inválido ("LOCAL"/"VISITANTE")
+            return false; 
+        }
+
+        if (updatedRows == 0) {
+             // El partido no existe (ID inválido)
+             return false;
+        }
+
+        // 2. Propagación en Tiempo Real (Emisión de Evento)
+        // El listener (WebSocket component) manejará el envío del mensaje actualizado.
+        eventPublisher.publishEvent(new PartidoUpdatedEvent(partidoId));
+
+        return true;
     }
 
     public Partido eliminarPartido(Integer id) {
