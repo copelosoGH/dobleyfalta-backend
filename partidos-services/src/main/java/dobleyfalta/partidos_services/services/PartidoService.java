@@ -7,10 +7,13 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import dobleyfalta.partidos_services.DTO.CrearPartidoRequestDTO;
 import dobleyfalta.partidos_services.DTO.EquipoDTO;
 import dobleyfalta.partidos_services.DTO.MarcadorUpdatedRequest;
 import dobleyfalta.partidos_services.DTO.PartidoDTO;
 import dobleyfalta.partidos_services.events.PartidoUpdatedEvent;
+import dobleyfalta.partidos_services.models.EstadoPartido;
+import dobleyfalta.partidos_services.models.Jornada;
 import dobleyfalta.partidos_services.models.Partido;
 import dobleyfalta.partidos_services.repository.PartidoRespository;
 import jakarta.transaction.Transactional;
@@ -21,13 +24,16 @@ public class PartidoService {
     private final PartidoRespository partidoRespository;
     private final RestTemplate restTemplate;
     private final ApplicationEventPublisher eventPublisher;
+    private final JornadaService jornadaService;
 
     private final String EQUIPO_SERVICE_URL = "http://localhost:8080/api/equipos/";
 
-    public PartidoService(PartidoRespository partidoRespository, RestTemplate restTemplate, ApplicationEventPublisher eventPublisher) {
+    public PartidoService(PartidoRespository partidoRespository, RestTemplate restTemplate, 
+    ApplicationEventPublisher eventPublisher, JornadaService jornadaService) {
         this.partidoRespository = partidoRespository;
         this.restTemplate = restTemplate;
         this.eventPublisher = eventPublisher;
+        this.jornadaService = jornadaService;
     }
 
     public List<Partido> getAll() {
@@ -61,8 +67,35 @@ public class PartidoService {
         dto.setEstado(partido.getEstadoPartido());
         return dto;
     }
+    
+    // ... otros métodos
 
-    public Partido crearPartido(Partido partido) {
+    // MÉTODOS DE CREACIÓN ACTUALIZADO (Recibe DTO, no la entidad)
+    public Partido crearPartido(CrearPartidoRequestDTO partidoDto) {
+        // 1. OBTENER LA JORNADA
+        Jornada jornada = jornadaService.getJornadaById(partidoDto.getIdJornada());
+        
+        if (jornada == null) {
+            // Lanza una excepción si la jornada no existe (buena práctica)
+            throw new IllegalArgumentException("Jornada con ID " + partidoDto.getIdJornada() + " no encontrada.");
+        }
+
+        // 2. CONSTRUIR LA ENTIDAD PARTIDO
+        Partido partido = new Partido();
+        // Mapeo manual del DTO a la Entidad
+        partido.setFecha(partidoDto.getFecha());
+        partido.setPuntosLocal(partidoDto.getPuntosLocal() != null ? partidoDto.getPuntosLocal() : 0);
+        partido.setPuntosVisitante(partidoDto.getPuntosVisitante() != null ? partidoDto.getPuntosVisitante() : 0);
+        partido.setIdEquipoLocal(partidoDto.getIdEquipoLocal());
+        partido.setIdEquipoVisitante(partidoDto.getIdEquipoVisitante());
+        
+        // Asignar el estado (y si es nulo, le ponemos 'proximo' por defecto)
+        partido.setEstadoPartido(partidoDto.getEstadoPartido() != null ? partidoDto.getEstadoPartido() : EstadoPartido.proximo);
+        
+        // Asignar el objeto de relación OBLIGATORIO
+        partido.setJornada(jornada); 
+
+        // 3. Guardar y retornar
         return partidoRespository.save(partido);
     }
 
