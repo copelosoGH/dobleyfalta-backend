@@ -13,7 +13,7 @@ public class JwtUtil {
 
     // Genera un Key a partir de un String
     private final Key SECRET_KEY = Keys.hmacShaKeyFor("conradoPelosoNaomiKakisuYEmanuelNeme".getBytes());
-    private final long EXPIRATION = 1000 * 60 * 60; // 1 hora
+    private final long EXPIRATION = 1000 * 60 * 60 * 24; // 24 horas
 
     public String generateToken(String id) {
         return Jwts.builder()
