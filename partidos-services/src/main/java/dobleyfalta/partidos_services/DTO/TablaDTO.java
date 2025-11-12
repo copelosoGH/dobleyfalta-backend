@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 public class TablaDTO {
     private Integer puesto;
+    private String logo;
     private String equipo;
     private Integer puntos;
     private Integer pj;

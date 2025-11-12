@@ -1,6 +1,10 @@
 package dobleyfalta.partidos_services.services;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -37,8 +41,8 @@ public class TablaService {
             Integer idEquipoVisitante = partido.getIdEquipoVisitante();
             
             //obtener o crear entrada para equipo local
-            tabla.putIfAbsent(idEquipoLocal, new TablaDTO(null, getNombreEquipo(idEquipoLocal), 0,0,0,0,0,0));
-            tabla.putIfAbsent(idEquipoVisitante, new TablaDTO(null, getNombreEquipo(idEquipoVisitante), 0,0,0,0,0,0));
+            tabla.putIfAbsent(idEquipoLocal, new TablaDTO(null, getLogo(idEquipoLocal), getNombreEquipo(idEquipoLocal), 0,0,0,0,0,0));
+            tabla.putIfAbsent(idEquipoVisitante, new TablaDTO(null, getLogo(idEquipoVisitante), getNombreEquipo(idEquipoVisitante), 0,0,0,0,0,0));
         
             TablaDTO equipoLocal = tabla.get(idEquipoLocal);
             TablaDTO equipoVisitante = tabla.get(idEquipoVisitante);
@@ -103,6 +107,15 @@ public class TablaService {
             return equipo != null ? equipo.getNombre() : "Equipo"+idEquipo;
         } catch (Exception e){
             return "Equipo"+idEquipo;
+        }
+    }
+
+    private String getLogo(Integer idEquipo) {
+        try{
+            EquipoDTO equipo = restTemplate.getForObject(EQUIPO_SERVICE_URL + idEquipo, EquipoDTO.class);
+            return equipo != null ? equipo.getLogo() : "Logo"+idEquipo;
+        } catch (Exception e){
+            return "Logo"+idEquipo;
         }
     }
 }
