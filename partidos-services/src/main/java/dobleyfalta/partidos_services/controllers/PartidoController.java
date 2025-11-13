@@ -76,7 +76,7 @@ public class PartidoController {
         return ResponseEntity.ok(actualizarCarrito);
     }
 
-    @PutMapping("puntajes/{id}")
+    @PutMapping("/{id}/puntaje")
     public ResponseEntity<Void> updateScore(
             @PathVariable("id") Integer id,
             @Validated @RequestBody MarcadorUpdatedRequest request) {

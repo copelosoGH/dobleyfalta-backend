@@ -49,6 +49,11 @@ spring:
           uri: http://localhost:8086
           predicates:
             - Path=/api/partidos/**
+
+        - id: puntaje-service
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/partidos/puntajes/**
         
         # Servicio de Ligas (dentro del microservicio de partidos)
         - id: liga-service
