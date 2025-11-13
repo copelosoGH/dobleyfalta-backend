@@ -62,6 +62,11 @@ spring:
           predicates:
             - Path=/api/jornadas/**
 
+        - id: tabla-service
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/tablas/**
+
         # 7. Servicio de Equipos
         - id: equipo-service
           uri: http://localhost:8087
