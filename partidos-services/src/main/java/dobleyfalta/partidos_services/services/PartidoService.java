@@ -107,6 +107,7 @@ public class PartidoService {
             partidoEdit.setIdEquipoVisitante(partido.getIdEquipoVisitante());
             partidoEdit.setPuntosLocal(partido.getPuntosLocal());
             partidoEdit.setPuntosVisitante(partido.getPuntosVisitante());
+            partidoEdit.setEstadoPartido(partido.getEstadoPartido());
             return partidoRespository.save(partidoEdit);
         }
         return null;
@@ -115,7 +116,6 @@ public class PartidoService {
     @Transactional
     public boolean updatedMarcador(Integer partidoId, MarcadorUpdatedRequest request) {
         
-        // 1. Validar y Actualizar DB
         int updatedRows = 0;
         String equipo = request.getEquipo().toUpperCase();
         Integer puntos = request.getPuntos();
@@ -133,9 +133,6 @@ public class PartidoService {
              // El partido no existe (ID inválido)
              return false;
         }
-
-        // 2. Propagación en Tiempo Real (Emisión de Evento)
-        // El listener (WebSocket component) manejará el envío del mensaje actualizado.
         eventPublisher.publishEvent(new PartidoUpdatedEvent(partidoId));
 
         return true;

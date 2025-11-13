@@ -72,8 +72,8 @@ public class PartidoController {
         if (id == null || partido == null) {
             return ResponseEntity.notFound().build();
         }
-        Partido actualizarCarrito = partidoService.editarPartido(id, partido);
-        return ResponseEntity.ok(actualizarCarrito);
+        Partido actualizarPartido = partidoService.editarPartido(id, partido);
+        return ResponseEntity.ok(actualizarPartido);
     }
 
     @PutMapping("/{id}/puntaje")

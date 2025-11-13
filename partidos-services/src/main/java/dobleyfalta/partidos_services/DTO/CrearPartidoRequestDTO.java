@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor; // Añadido (opcional)
 @AllArgsConstructor
 public class CrearPartidoRequestDTO {
     
-    // El ID simple, como lo quieres recibir desde el frontend
     private Integer idJornada; 
 
     private LocalDateTime fecha;
@@ -20,6 +19,5 @@ public class CrearPartidoRequestDTO {
     private Integer idEquipoLocal;
     private Integer idEquipoVisitante;
     
-    // Usamos el Enum directamente. Spring lo mapea desde el string del JSON.
     private EstadoPartido estadoPartido; 
 }
