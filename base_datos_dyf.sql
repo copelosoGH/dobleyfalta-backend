@@ -378,3 +378,8 @@ END;
 //
 
 DELIMITER ;
+
+ALTER TABLE Producto
+ADD COLUMN imagen VARCHAR(255);
+
+

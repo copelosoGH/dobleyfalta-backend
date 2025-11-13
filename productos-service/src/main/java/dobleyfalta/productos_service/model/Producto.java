@@ -42,6 +42,9 @@ public class Producto {
     @Column(name = "precio", nullable = false)
     private Double precio;
 
+    @Column(name = "imagen", nullable = true)
+    private String imagen;
+
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     @Fetch(FetchMode.SUBSELECT)

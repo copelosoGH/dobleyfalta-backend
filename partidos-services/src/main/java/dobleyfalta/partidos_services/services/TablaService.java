@@ -20,7 +20,7 @@ public class TablaService {
     
     private final PartidoRespository partidoRepository;     
     private final RestTemplate restTemplate; // para consultar los equipos desde equipo-service
-    private final String EQUIPO_SERVICE_URL = "http://localhost:8087/api/equipos/";
+    private final String EQUIPO_SERVICE_URL = "http://localhost:8080/api/equipos/";
 
     public TablaService(PartidoRespository partidoRepository, RestTemplate restTemplate) {
         this.partidoRepository = partidoRepository;

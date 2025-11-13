@@ -33,6 +33,11 @@ spring:
           predicates:
             - Path=/api/productos/**
 
+        - id: producto-uploads
+          uri: http://localhost:8084
+          predicates:
+            - Path=/uploads/productos/**
+
         # 5. Servicio de Compras
         - id: compra-service
           uri: http://localhost:8085

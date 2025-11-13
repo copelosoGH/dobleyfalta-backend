@@ -6,6 +6,9 @@ import java.util.List;
 
 import dobleyfalta.partidos_services.DTO.TablaDTO;
 import dobleyfalta.partidos_services.services.TablaService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/tablas")
@@ -21,4 +24,5 @@ public class TablaController {
         List<TablaDTO> tabla = tablaService.calcularTablaPorLiga(idLiga);
         return ResponseEntity.ok(tabla);
     }
+
 }
