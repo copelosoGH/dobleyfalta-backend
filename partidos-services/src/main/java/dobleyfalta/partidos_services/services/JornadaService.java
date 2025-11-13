@@ -4,16 +4,22 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import dobleyfalta.partidos_services.DTO.JornadaRequestDTO;
 import dobleyfalta.partidos_services.models.Jornada;
+import dobleyfalta.partidos_services.models.Liga;
 import dobleyfalta.partidos_services.repository.JornadaRepository;
+import dobleyfalta.partidos_services.repository.LigaRepository;
 
 @Service
 public class JornadaService {
 
     private final JornadaRepository jornadaRepository;
 
-    public JornadaService(JornadaRepository jornadaRepository) {
+    private final LigaRepository ligaRepository;
+
+    public JornadaService(JornadaRepository jornadaRepository, LigaRepository ligaRepository) {
         this.jornadaRepository = jornadaRepository;
+        this.ligaRepository = ligaRepository;
     }
 
     public List<Jornada> getAll() {
@@ -28,20 +34,35 @@ public class JornadaService {
         return jornadaRepository.findByLigaIdLiga(idLiga);
     }
 
-    public Jornada crearJornada(Jornada jornada) {
+    public Jornada crearJornada(JornadaRequestDTO dto) {
+        Liga liga = ligaRepository.findById(dto.getIdLiga())
+                .orElseThrow(() -> new RuntimeException("Liga no encontrada"));
+
+        Jornada jornada = new Jornada();
+        jornada.setNumero(dto.getNumero());
+        jornada.setFechaInicio(dto.getFechaInicio());
+        jornada.setFechaFin(dto.getFechaFin());
+        jornada.setLiga(liga);
+
         return jornadaRepository.save(jornada);
     }
 
-    public Jornada editarJornada(Integer id, Jornada jornada) {
+    // Editar jornada usando DTO
+    public Jornada editarJornada(Integer id, JornadaRequestDTO dto) {
         Jornada jornadaEdit = jornadaRepository.findByIdJornada(id);
-        if (jornadaEdit != null) {
-            jornadaEdit.setNumero(jornada.getNumero());
-            jornadaEdit.setFechaInicio(jornada.getFechaInicio());
-            jornadaEdit.setFechaFin(jornada.getFechaFin());
-            jornadaEdit.setLiga(jornada.getLiga());
-            return jornadaRepository.save(jornadaEdit);
+        if (jornadaEdit == null) {
+            return null;
         }
-        return null;
+
+        Liga liga = ligaRepository.findById(dto.getIdLiga())
+                .orElseThrow(() -> new RuntimeException("Liga no encontrada"));
+
+        jornadaEdit.setNumero(dto.getNumero());
+        jornadaEdit.setFechaInicio(dto.getFechaInicio());
+        jornadaEdit.setFechaFin(dto.getFechaFin());
+        jornadaEdit.setLiga(liga);
+
+        return jornadaRepository.save(jornadaEdit);
     }
 
     public Jornada eliminarJornada(Integer id) {

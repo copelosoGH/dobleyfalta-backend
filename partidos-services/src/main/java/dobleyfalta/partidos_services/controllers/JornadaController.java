@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
 
+import dobleyfalta.partidos_services.DTO.JornadaRequestDTO;
 import dobleyfalta.partidos_services.models.Jornada;
 import dobleyfalta.partidos_services.services.JornadaService;
 
@@ -42,14 +43,14 @@ public class JornadaController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Jornada> addJornada(@RequestBody Jornada jornada) {
-        Jornada nuevaJornada = jornadaService.crearJornada(jornada);
+    public ResponseEntity<Jornada> addJornada(@RequestBody JornadaRequestDTO dto) {
+        Jornada nuevaJornada = jornadaService.crearJornada(dto);
         return ResponseEntity.ok(nuevaJornada);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Jornada> editarJornada(@PathVariable Integer id, @RequestBody Jornada jornada) {
-        Jornada jornadaEditada = jornadaService.editarJornada(id, jornada);
+    public ResponseEntity<Jornada> editarJornada(@PathVariable Integer id, @RequestBody JornadaRequestDTO dto) {
+        Jornada jornadaEditada = jornadaService.editarJornada(id, dto);
         if (jornadaEditada == null) {
             return ResponseEntity.notFound().build();
         }
